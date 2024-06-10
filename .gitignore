@@ -9,3 +9,6 @@ dist/
 
 # Secrets
 .env
+
+# vim swap files
+*.sw?

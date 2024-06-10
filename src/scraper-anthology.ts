@@ -1,6 +1,14 @@
 import {JSDOM} from 'jsdom';
+import {ListingDivParser} from "./listing_div_parser";
 
-type Showing = { time: Date, title: string, text: string }
+type Showing = {
+  time: Date,
+  title: string,
+  director?: string,
+  year?: string,
+  duration?: number,
+  format?: string,
+}
 
 export async function getHtml(url: string) {
   // Validate url
@@ -41,14 +49,14 @@ export async function scrapeDates(start: Date, end: Date) {
   for (let year = startYear; year <= endYear; year++) {
     for (let month = startMonth; month <= endMonth; month++) {
       const html = await getHtml(anthologyUrl(year, month))
-      listings = listings.concat(extractListingsDOM(html, year, start, end))
+      listings = listings.concat(extractListings(html, year, start, end))
     }
   }
 
   return listings
 }
 
-export function extractListingsDOM(html: string, year: number, start: Date, end: Date): Showing[] {
+export function extractListings(html: string, year: number, start: Date, end: Date): Showing[] {
   const dom = new JSDOM(html)
   const topElements = dom.window.document
     .querySelectorAll('#calendar > div.film-showing > div.showing-details, #calendar > h3')
@@ -90,38 +98,32 @@ function dateFromHeading(elem: HTMLHeadingElement, year: number): Date|undefined
   }
 }
 
-function dateFromHeadingEXAMPLE(elem: HTMLHeadingElement, year: number) {
-  const children = elem.childNodes.values()
-  let result: IteratorResult<ChildNode, ChildNode>
-  let timestamp = NaN
-
-  while ((result = children.next()) && !result.done) {
-    if (result.value.nodeType === Node.TEXT_NODE) {
-      timestamp = Date.parse((elem.textContent?.trim() ?? '') + ', ' + year)
-      break
-    }
-  }
-
-  if (!isNaN(timestamp)) {
-    return new Date(timestamp)
-  }
-}
-
 function extractShowing(elem: HTMLDivElement, date: Date): Showing|undefined {
-  let timeMatch = elem.querySelector('a')?.textContent?.trim().toLowerCase()
-    .match(/(\d\d?)\s*:\s*(\d\d)\s*(am|pm)/) as RegExpMatchArray|null;
+  const parser = new ListingDivParser(elem)
 
-  if (timeMatch !== null && timeMatch.length >= 4) {
-    let hours = parseInt(timeMatch[1], 10) + (timeMatch[3] === 'pm' ? 12 : 0)
-    let minutes = parseInt(timeMatch[2], 10)
+  const [hours, minutes] = parser.movieTime()
 
-    if (!isNaN(hours) && !isNaN(minutes)) {
+  if (!isNaN(hours) && !isNaN(minutes)) {
+    const title = parser.title()
+
+    if (title !== '') {
       return {
         time: new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes),
-        title: elem.querySelector('span.film-title')?.textContent?.trim() ?? '',
-        text: elem.textContent ?? '',
+        title: title,
+        director: parser.director(),
+        year: parser.year(),
+        duration: parser.duration(),
+        format: parser.format(),
       }
     }
   }
 }
+
 // In Finnish, English, and French with English subtitles, 2023, 81 min, DCP. These screenings are presented with support from Unifrance.
+/*
+
+9:00 PM
+EC: A SIXTH OF THE WORLD
+by Dziga Vertov
+With Russian intertitles, English synopsis available, 1926, 74 min, 35mm, b&w, silent
+ */
