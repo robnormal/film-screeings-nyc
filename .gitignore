@@ -1,0 +1,11 @@
+node_modules/
+.idea/
+
+# typescript cache files
+*.tsbuildinfo
+
+# JS output
+dist/
+
+# Secrets
+.env
