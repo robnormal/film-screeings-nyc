@@ -2,7 +2,7 @@ const YEAR_REGEX = /\d\d\d\d(\s*-\s*\d\d\d\d)?/
 const DURATION_REGEX = /(\d+)\s*min/i
 const FORMAT_REGEX = /\d+\s*mm|DCP|digital|video|HD/i
 
-export class ListingDivParser {
+export class AnthologyListingDivParser {
   private elem: HTMLDivElement;
   private _textNodes: string[]|undefined;
   private _otherDetails: string[]|undefined;
@@ -13,7 +13,7 @@ export class ListingDivParser {
   }
 
   movieTime() {
-    let timeMatch = this.elem.querySelector('a')?.textContent?.trim().toLowerCase()
+    let timeMatch = this.timeLink()?.textContent?.trim().toLowerCase()
       .match(/(\d\d?)\s*:\s*(\d\d)\s*(am|pm)/) as RegExpMatchArray | null;
 
     if (timeMatch !== null && timeMatch.length >= 4) {
@@ -24,6 +24,10 @@ export class ListingDivParser {
     } else {
       return [NaN, NaN]
     }
+  }
+
+  url(): string {
+    return this.timeLink()?.name || ''
   }
 
   title(): string {
@@ -116,5 +120,9 @@ export class ListingDivParser {
     }
 
     return this._otherDetails
+  }
+
+  private timeLink(): HTMLAnchorElement|null {
+    return this.elem.querySelector('a')
   }
 }

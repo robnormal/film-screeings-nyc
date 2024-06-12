@@ -1,40 +1,13 @@
 import {JSDOM} from 'jsdom';
-import {ListingDivParser} from "./listing_div_parser";
-
-type Showing = {
-  time: Date,
-  title: string,
-  director?: string,
-  year?: string,
-  duration?: number,
-  format?: string,
-}
-
-export async function getHtml(url: string) {
-  // Validate url
-  new URL(url)
-
-  const res = await fetch(url, {
-    credentials: 'same-origin',
-  })
-
-  if (res.status >= 400 && res.status < 500) {
-    throw new Error(res.status.toString())
-  } else if (res.status < 200 || res.status >= 300) {
-    console.log(res.headers.get('location'))
-    console.error('Unknown status: ' + res.status)
-    throw new Error('An unknown error occurred')
-  }
-
-  return res.text()
-}
+import {AnthologyListingDivParser} from "./anthology_listing_div_parser";
+import {getHtml, Showing} from "./lib";
 
 function anthologyUrl(year: number, month: number) {
   // URL uses standard calendar number for months, which is 1 off from array-index number that JS uses
   return `http://anthologyfilmarchives.org/film_screenings/calendar?view=list&month=${month+1}&year=${year}`
 }
 
-export async function scrapeDates(start: Date, end: Date) {
+async function scrapeListings(start: Date, end: Date) {
   // make start and end be at the start and end of the day
   start = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0)
   end = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59)
@@ -56,7 +29,7 @@ export async function scrapeDates(start: Date, end: Date) {
   return listings
 }
 
-export function extractListings(html: string, year: number, start: Date, end: Date): Showing[] {
+function extractListings(html: string, year: number, start: Date, end: Date): Showing[] {
   const dom = new JSDOM(html)
   const topElements = dom.window.document
     .querySelectorAll('#calendar > div.film-showing > div.showing-details, #calendar > h3')
@@ -99,7 +72,7 @@ function dateFromHeading(elem: HTMLHeadingElement, year: number): Date|undefined
 }
 
 function extractShowing(elem: HTMLDivElement, date: Date): Showing|undefined {
-  const parser = new ListingDivParser(elem)
+  const parser = new AnthologyListingDivParser(elem)
 
   const [hours, minutes] = parser.movieTime()
 
@@ -110,6 +83,7 @@ function extractShowing(elem: HTMLDivElement, date: Date): Showing|undefined {
       return {
         time: new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes),
         title: title,
+        url: parser.url(),
         director: parser.director(),
         year: parser.year(),
         duration: parser.duration(),
@@ -119,11 +93,4 @@ function extractShowing(elem: HTMLDivElement, date: Date): Showing|undefined {
   }
 }
 
-// In Finnish, English, and French with English subtitles, 2023, 81 min, DCP. These screenings are presented with support from Unifrance.
-/*
-
-9:00 PM
-EC: A SIXTH OF THE WORLD
-by Dziga Vertov
-With Russian intertitles, English synopsis available, 1926, 74 min, 35mm, b&w, silent
- */
+export default { scrapeListings }

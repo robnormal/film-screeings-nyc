@@ -1,14 +1,16 @@
 node_modules/
 .idea/
 
+# vim swap files
+*.sw?
+
 # typescript cache files
 *.tsbuildinfo
-
-# JS output
-dist/
 
 # Secrets
 .env
 
-# vim swap files
-*.sw?
+# JS output
+dist/
+output/
+
