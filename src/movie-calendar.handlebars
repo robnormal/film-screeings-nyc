@@ -6,8 +6,23 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    {{#each listings}}
-      <p>{{this.title}}</p>
-    {{/each}}
+  {{#each days}}
+    <div>
+      <h2>{{day}}</h2>
+      {{#each theatersWithShowings}}
+        <h3><a href="{{theater.url}}">{{theater.name}}</a></h3>
+        <ul>
+          {{#each showings}}
+            <li>
+              <a href="{{url}}">
+                <span class="showing-time">{{datetime}}</span>
+                <span class="showing-title">{{title}}</span>
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      {{/each}}
+    </div>
+  {{/each}}
   </body>
 </html>

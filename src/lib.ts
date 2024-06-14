@@ -1,12 +1,36 @@
-export type Showing = {
+import dayjs from "dayjs";
+import {Showing} from "./showing";
+
+export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
+
+export type ShowingView = {
   url: string,
-  time: Date,
+  time: string,
   title: string,
-  director?: string,
-  year?: string,
-  duration?: number,
-  format?: string,
+  duration: string,
 }
+
+export type Theater = {
+  name: string,
+  url: string,
+}
+
+export type TheaterModule = {
+  theater: Theater,
+  showings: (start: Date, end: Date) => Promise<Showing[]>,
+}
+
+export type TheaterWithShowings = {
+  theater: Theater,
+  showings: Showing[],
+}
+
+export type DayWithTheaterShowings = {
+  day: string,
+  theatersWithShowings: TheaterWithShowings[],
+}
+
+export type GroupedShowings = Record<string, Record<string, Showing[]>>
 
 export async function getHtml(url: string) {
   // Validate url
@@ -25,4 +49,17 @@ export async function getHtml(url: string) {
   }
 
   return res.text()
+}
+
+export function viewShowing(showing: Showing): ShowingView {
+  return {
+    url: showing.url,
+    title: showing.title,
+    duration: showing.duration ? `${Math.floor(showing.duration/60)}h ${showing.duration % 60}m` : '',
+    time: dayjs(showing.datetime).format('h:mm a')
+  }
+}
+
+export function indicesUpTo(length: number) {
+  return [...Array(length).keys()]
 }

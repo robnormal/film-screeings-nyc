@@ -4,12 +4,13 @@ const FORMAT_REGEX = /\d+\s*mm|DCP|digital|video|HD/i
 
 export class AnthologyListingDivParser {
   private elem: HTMLDivElement;
+  private calendarUrl: string;
   private _textNodes: string[]|undefined;
   private _otherDetails: string[]|undefined;
-  private _yearIndex: number|undefined;
 
-  constructor(elem: HTMLDivElement) {
+  constructor(elem: HTMLDivElement, calendarUrl: string) {
     this.elem = elem
+    this.calendarUrl = calendarUrl
   }
 
   movieTime() {
