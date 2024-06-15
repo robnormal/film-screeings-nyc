@@ -1,7 +1,7 @@
 import {JSDOM} from 'jsdom';
 import {AnthologyListingDivParser} from "./anthology_listing_div_parser";
-import {getHtml, Theater} from "./lib";
-import {Showing} from "./showing";
+import {dateAtTime, getHtml, Theater} from "./lib";
+import {Showing, showingFromTitle} from "./showing";
 
 const theater: Theater = {
   name: 'Anthology Film Archives',
@@ -65,14 +65,14 @@ class MonthScraper {
       if (title !== '') {
         const showing = new Showing(
           theater,
-          new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes),
-          this.url + parser.url(),
-          title
+          { title },
+          dateAtTime(date, hours, minutes),
+          this.url + parser.url()
         )
 
-        showing.director = parser.director()
-        showing.yearMade = parser.year()
-        showing.duration = parser.duration()
+        showing.movie.director = parser.director()
+        showing.movie.yearMade = parser.year()
+        showing.movie.duration = parser.duration()
         showing.format = parser.format()
 
         return showing
@@ -102,7 +102,7 @@ function anthologyUrl(year: number, month: number) {
 }
 
 type DateWithShowingsByTheater = {
-  date: Date,
+  date: string,
   showingsByTheater: [{
     theater: Theater,
     showings: Showing[],
@@ -110,10 +110,10 @@ type DateWithShowingsByTheater = {
 }
 
 function groupListingsByDateAndTheater(showings: Showing[]): DateWithShowingsByTheater[] {
-  const showingsByDateAndTheater: DateWithShowingsByTheater[] = []
+  const showingsByDateAndTheater: Record<string, DateWithShowingsByTheater> = {}
 
   showings.forEach(showing => {
-    const day = showing.datetime.getDay().toString()
+    const day = datejs(showing.datetime).format().toString()
 
     if (!showingsByDateAndTheater.hasOwnProperty(day)) {
       showingsByDateAndTheater[day] = { date: day, showingsByTheater: [] }

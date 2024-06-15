@@ -1,12 +1,10 @@
 import {
-  DayWithTheaterShowings,
+  DayWithTheaterShowings, formatAsDate,
   GroupedShowings,
   MILLISECONDS_PER_DAY,
-  Theater,
   TheaterModule,
   TheaterWithShowings
 } from "./lib";
-import dayjs from "dayjs";
 import anthologyFilmArchives from "./anthology-film-archives";
 import filmForum from "./film-forum";
 import {Showing} from "./showing";
@@ -24,7 +22,7 @@ export class Scraper {
 
     this.days = [];
     for (let date = this.start; date < this.end; date = new Date(date.getTime() + MILLISECONDS_PER_DAY)) {
-      this.days.push(dayjs(date).format('YYYY-MM-DD'))
+      this.days.push(formatAsDate(date))
     }
 
     this.theaterModules = [
@@ -34,9 +32,6 @@ export class Scraper {
   }
 
   getShowingsForHandlebars() {
-    let allShowings: Showing[] = []
-    let showings: Showing[]
-
     return Promise.all(this.theaterModules.map(module => {
       return module.showings(this.start, this.end);
     })).then(xs => {

@@ -3,6 +3,13 @@ import {Showing} from "./showing";
 
 export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
 
+export type Movie = {
+  title: string
+  director?: string
+  yearMade?: string
+  duration?: number
+}
+
 export type ShowingView = {
   url: string,
   time: string,
@@ -54,12 +61,30 @@ export async function getHtml(url: string) {
 export function viewShowing(showing: Showing): ShowingView {
   return {
     url: showing.url,
-    title: showing.title,
-    duration: showing.duration ? `${Math.floor(showing.duration/60)}h ${showing.duration % 60}m` : '',
+    title: showing.movie.title,
+    duration: showing.movie.duration ? formatDuration(showing.movie.duration) : '',
     time: dayjs(showing.datetime).format('h:mm a')
   }
 }
 
+export function formatDuration(duration: number) {
+  return `${Math.floor(duration/60)}h ${duration % 60}m`
+}
+
 export function indicesUpTo(length: number) {
   return [...Array(length).keys()]
+}
+
+export function dateAtTime(date: Date, hours: number, minutes: number) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes)
+}
+
+export function init<T>(record: Record<string, T>, key: string, value: T) {
+  if (!record.hasOwnProperty(key)) {
+    record[key] = value
+  }
+}
+
+export function formatAsDate(date: Date): string {
+  return dayjs(date).format('YYYY-MM-DD')
 }

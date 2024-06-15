@@ -1,7 +1,7 @@
 import {promises as fsPromises} from 'fs'
 import Handlebars from "handlebars";
 
-import {GroupedShowings, indicesUpTo, MILLISECONDS_PER_DAY, viewShowing} from "./lib";
+import {indicesUpTo, MILLISECONDS_PER_DAY, viewShowing} from "./lib";
 
 import {Showing} from "./showing";
 import {Scraper} from "./scraper";
