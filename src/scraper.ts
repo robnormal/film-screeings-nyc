@@ -8,6 +8,7 @@ import {
 import anthologyFilmArchives from "./anthology-film-archives";
 import filmForum from "./film-forum";
 import {Showing} from "./showing";
+import metrograph from "./metrograph";
 
 export class Scraper {
   start: Date
@@ -28,6 +29,7 @@ export class Scraper {
     this.theaterModules = [
       anthologyFilmArchives,
       filmForum,
+      metrograph,
     ]
   }
 

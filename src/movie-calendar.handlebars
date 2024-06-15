@@ -16,9 +16,12 @@
             <li>
               <a href="{{url}}">
                 <span class="showing-time">{{time datetime}}</span>
-                <span class="showing-title">{{movie.title}}</span>
               </a>
-              <span>{{movie.duration}} mins</span>
+              /
+              <strong class="showing-title">{{movie.title}}</strong>
+              /
+              <span>{{movie.duration}}mins</span>
+              /
               <span>{{format}}</span>
             </li>
           {{/each}}
