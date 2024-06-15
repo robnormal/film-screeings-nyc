@@ -19,18 +19,19 @@ async function showings(_start: Date, _end: Date): Promise<Showing[]> {
     const date = new Date(today.getTime() + day * MILLISECONDS_PER_DAY)
 
     listings.forEach(listing => {
-      showings.push(new Showing(
+      const showing= new Showing(
         theater,
         moviesWithFormat[listing.title].movie,
         dateAtTime(date, listing.time.hours, listing.time.minutes),
         listing.url
-      ))
+      )
+      showing.format = moviesWithFormat[listing.title].format
+      showings.push(showing)
     })
   })
 
   return showings
 }
-
 
 const theater: Theater = {
   name: 'Film Forum',

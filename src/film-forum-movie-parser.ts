@@ -37,13 +37,13 @@ export class MoviePageParser {
   }
 
   format() {
-    if (this.text.match(/35\smm/)) {
+    if (this.text.match(/35\s*mm/)) {
       return '35mm'
-    } else if (this.text.match(/16\smm/)) {
+    } else if (this.text.match(/16\s*mm/)) {
       return '16mm'
-    } else if (this.text.match(/8\smm/)) {
+    } else if (this.text.match(/8\s*mm/)) {
       return '8mm'
-    } else if (this.text.match(/70\smm/)) {
+    } else if (this.text.match(/70\s*mm/)) {
       return '70mm'
     } else if (this.text.match(/4k/)) {
       return '4K'

@@ -67,7 +67,7 @@ class MonthScraper {
           theater,
           { title },
           dateAtTime(date, hours, minutes),
-          this.url + parser.url()
+          this.url + '#' + parser.urlAnchor()
         )
 
         showing.movie.director = parser.director()

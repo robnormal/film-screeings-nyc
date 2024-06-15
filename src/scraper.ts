@@ -31,11 +31,15 @@ export class Scraper {
     ]
   }
 
-  getShowingsForHandlebars() {
+  getShowings(): Promise<Showing[]> {
     return Promise.all(this.theaterModules.map(module => {
       return module.showings(this.start, this.end);
-    })).then(xs => {
-      return this.structureShowingsForHandlebars(xs.flat(1))
+    })).then(xs => xs.flat(1))
+  }
+
+  getShowingsForHandlebars(): Promise<DayWithTheaterShowings[]> {
+    return this.getShowings().then(xs => {
+      return this.structureShowingsForHandlebars(xs)
     })
   }
 

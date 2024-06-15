@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-  {{#each days}}
+  {{#each daysWithTheaterShowings}}
     <div>
       <h2>{{day}}</h2>
       {{#each theatersWithShowings}}
@@ -15,9 +15,11 @@
           {{#each showings}}
             <li>
               <a href="{{url}}">
-                <span class="showing-time">{{datetime}}</span>
-                <span class="showing-title">{{title}}</span>
+                <span class="showing-time">{{time datetime}}</span>
+                <span class="showing-title">{{movie.title}}</span>
               </a>
+              <span>{{movie.duration}} mins</span>
+              <span>{{format}}</span>
             </li>
           {{/each}}
         </ul>

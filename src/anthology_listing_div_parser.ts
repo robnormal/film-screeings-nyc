@@ -27,7 +27,7 @@ export class AnthologyListingDivParser {
     }
   }
 
-  url(): string {
+  urlAnchor(): string {
     return this.timeLink()?.name || ''
   }
 

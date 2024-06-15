@@ -63,7 +63,7 @@ export function viewShowing(showing: Showing): ShowingView {
     url: showing.url,
     title: showing.movie.title,
     duration: showing.movie.duration ? formatDuration(showing.movie.duration) : '',
-    time: dayjs(showing.datetime).format('h:mm a')
+    time: formatAsTime(showing.datetime)
   }
 }
 
@@ -88,3 +88,8 @@ export function init<T>(record: Record<string, T>, key: string, value: T) {
 export function formatAsDate(date: Date): string {
   return dayjs(date).format('YYYY-MM-DD')
 }
+
+export function formatAsTime(date: Date): string {
+  return dayjs(date).format('h:mm a')
+}
+
