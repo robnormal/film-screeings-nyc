@@ -5,10 +5,12 @@ import {
   TheaterModule,
   TheaterWithShowings
 } from "../shared/lib";
-import anthologyFilmArchives from "./anthology-film-archives";
-import filmForum from "./film-forum";
+import anthologyFilmArchives from "./anthology-film-archives/anthology-film-archives";
+import filmForum from "./film-forum/film-forum";
 import metrograph from "./metrograph";
 import {Showing} from "./showing";
+import nitehawkWilliamsburg from "./nitehawk/williamsburg";
+import nitehawkProspectPark from "./nitehawk/prospect-park";
 
 export class Scraper {
   start: Date
@@ -27,9 +29,11 @@ export class Scraper {
     }
 
     this.theaterModules = [
-      anthologyFilmArchives,
       filmForum,
+      anthologyFilmArchives,
       metrograph,
+      nitehawkWilliamsburg,
+      nitehawkProspectPark,
     ]
   }
 

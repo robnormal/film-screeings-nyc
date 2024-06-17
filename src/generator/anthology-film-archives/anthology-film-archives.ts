@@ -1,8 +1,8 @@
 import {JSDOM} from 'jsdom';
 import {AnthologyListingDivParser} from "./anthology_listing_div_parser";
-import {dateAtTime, getHtml, Theater} from "../shared/lib";
-import {Showing} from "./showing";
-import {theaters} from "../shared/theaters";
+import {dateAtTime, getHtml, Theater} from "../../shared/lib";
+import {Showing} from "../showing";
+import {theaters} from "../../shared/theaters";
 
 class MonthScraper {
   start: Date

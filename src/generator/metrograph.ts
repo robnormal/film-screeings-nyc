@@ -1,4 +1,4 @@
-import {getHtml, Movie, Theater} from "../shared/lib";
+import {absoluteUrl, getHtml, Movie, Theater} from "../shared/lib";
 import {JSDOM} from "jsdom";
 import {Showing} from "./showing";
 import dayjs from "dayjs";
@@ -29,7 +29,7 @@ class CalendarScraper {
         return
       }
 
-      const titleLink = infoDiv.querySelector(':scope > h3.movie_title a[href]')
+      const titleLink: HTMLAnchorElement|null = infoDiv.querySelector(':scope > h3.movie_title a[href]')
       if (!titleLink) {
         return
       }
@@ -39,7 +39,7 @@ class CalendarScraper {
         return
       }
 
-      const url = new URL(titleLink.getAttribute('href') || '', theater.url).href
+      const url = absoluteUrl(titleLink, theater.url)
       const movie: Movie = { title }
 
       const subheadings = infoDiv.querySelectorAll(':scope > h5')

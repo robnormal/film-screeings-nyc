@@ -16,6 +16,16 @@ export const theaters = [
     name: 'Metrograph',
     url: 'https://metrograph.com/',
   },
+  {
+    id: '4',
+    name: 'Nitehawk - Williamsburg',
+    url: 'htts://nitehawkcinema.com/williamsburg/',
+  },
+  {
+    id: '5',
+    name: 'Nitehawk - Prospect Park',
+    url: 'htts://nitehawkcinema.com/prospectpark/',
+  }
 ]
 
 export const theatersById: Record<string, Theater> = {}

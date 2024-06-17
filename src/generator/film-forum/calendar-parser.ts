@@ -46,6 +46,9 @@ export class CalendarParser {
       if (url && title) {
         paragraph.querySelectorAll(':scope > span').forEach(span => {
           const [hours, minutes] = this.timeFromText(span.textContent || '')
+          if (isNaN(hours) || isNaN(minutes)) {
+            return
+          }
 
           calendarListings.push({
             url: url,

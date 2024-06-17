@@ -1,6 +1,6 @@
-import {getHtml, init, Movie} from "../shared/lib";
-import {CalendarListing} from "./film-forum-calendar-parser";
-import {MoviePageParser} from "./film-forum-movie-parser";
+import {getHtml, init, Movie} from "../../shared/lib";
+import {MoviePageParser} from "./movie-parser";
+import {CalendarListing} from "./calendar-parser";
 
 export type MoviesWithFormat = Record<string, { movie: Movie, format: string }>
 type MoviePage = { title: string, html: string }

@@ -104,3 +104,7 @@ export function groupBy<V>(values: V[], keyFunc: (val: V) => string): Record<str
 
   return grouped
 }
+
+export function absoluteUrl(anchor: HTMLAnchorElement, baseUrl: string) {
+  return new URL(anchor.getAttribute('href') || '', baseUrl).href
+}
