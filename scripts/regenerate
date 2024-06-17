@@ -1,0 +1,7 @@
+#!/bin/sh
+cd "$(FILM_SCREENINGS_NYC_GENERATOR)" || exit
+
+npm run generate && \
+	npm run webpack && \
+	gzip -c dist/bundle.js > dist/bundle.js.gz && \
+	cp -r dist "$(FILM_SCREENINGS_NYC_FRONTEND)"
