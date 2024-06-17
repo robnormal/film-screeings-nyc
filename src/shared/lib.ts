@@ -12,9 +12,9 @@ export type Movie = {
 }
 
 export type ShowingView = {
-  uid: string
   theaterId: string
-  datetime: Date
+  dateText: string
+  timestamp: number
   url: string
   movie: Movie
   format?: string
@@ -90,3 +90,17 @@ export function formatAsTime(date: Date): string {
   return dayjs(date).format('h:mm a')
 }
 
+export function formatHumanDate(date: Date): string {
+  return dayjs(date).format('dddd, MMMM D')
+}
+
+export function groupBy<V>(values: V[], keyFunc: (val: V) => string): Record<string, V[]> {
+  const grouped: Record<string, V[]> = {}
+  values.forEach(value => {
+    const key = keyFunc(value)
+    init(grouped, key, [] as V[])
+    grouped[key].push(value)
+  })
+
+  return grouped
+}

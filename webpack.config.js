@@ -1,7 +1,16 @@
 const path = require('path');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: 'production',
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'NYC Celluloid Guide',
+      xhtml: true,
+      hash: true,
+      template: "./src/frontend/index.html"
+    }),
+  ],
   entry: './src/frontend/index.tsx',
   module: {
     rules: [

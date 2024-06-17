@@ -17,3 +17,6 @@ export const theaters = [
     url: 'https://metrograph.com/',
   },
 ]
+
+export const theatersById: Record<string, Theater> = {}
+theaters.forEach(theater => theatersById[theater.id] = theater)

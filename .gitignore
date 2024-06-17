@@ -14,3 +14,5 @@ node_modules/
 dist/
 output/
 
+# generated content
+src/frontend/film-showings.ts
