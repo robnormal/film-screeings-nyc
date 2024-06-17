@@ -4,11 +4,11 @@ import {
   MILLISECONDS_PER_DAY,
   TheaterModule,
   TheaterWithShowings
-} from "./lib";
+} from "../shared/lib";
 import anthologyFilmArchives from "./anthology-film-archives";
 import filmForum from "./film-forum";
-import {Showing} from "./showing";
 import metrograph from "./metrograph";
+import {Showing} from "./showing";
 
 export class Scraper {
   start: Date
@@ -37,12 +37,6 @@ export class Scraper {
     return Promise.all(this.theaterModules.map(module => {
       return module.showings(this.start, this.end);
     })).then(xs => xs.flat(1))
-  }
-
-  getShowingsForHandlebars(): Promise<DayWithTheaterShowings[]> {
-    return this.getShowings().then(xs => {
-      return this.structureShowingsForHandlebars(xs)
-    })
   }
 
   groupByDateAndTheater(showings: Showing[]): GroupedShowings {

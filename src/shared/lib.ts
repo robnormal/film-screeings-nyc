@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {Showing} from "./showing";
+import {Showing} from "../generator/showing";
+import React from "react";
 
 export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
 
@@ -11,13 +12,16 @@ export type Movie = {
 }
 
 export type ShowingView = {
-  url: string,
-  time: string,
-  title: string,
-  duration: string,
+  uid: string
+  theaterId: string
+  datetime: Date
+  url: string
+  movie: Movie
+  format?: string
 }
 
 export type Theater = {
+  id: string,
   name: string,
   url: string,
 }
@@ -39,6 +43,8 @@ export type DayWithTheaterShowings = {
 
 export type GroupedShowings = Record<string, Record<string, Showing[]>>
 
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
+
 export async function getHtml(url: string) {
   // Validate url
   new URL(url)
@@ -56,15 +62,6 @@ export async function getHtml(url: string) {
   }
 
   return res.text()
-}
-
-export function viewShowing(showing: Showing): ShowingView {
-  return {
-    url: showing.url,
-    title: showing.movie.title,
-    duration: showing.movie.duration ? formatDuration(showing.movie.duration) : '',
-    time: formatAsTime(showing.datetime)
-  }
 }
 
 export function formatDuration(duration: number) {

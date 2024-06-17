@@ -1,7 +1,8 @@
-import {dateAtTime, getHtml, MILLISECONDS_PER_DAY, Theater} from "./lib";
+import {dateAtTime, getHtml, MILLISECONDS_PER_DAY, Theater} from "../shared/lib";
 import {Showing} from "./showing";
 import {CalendarParser} from "./film-forum-calendar-parser";
 import {MovieScraper} from "./film-forum-movie-scraper";
+import {theaters} from "../shared/theaters";
 
 async function showings(_start: Date, _end: Date): Promise<Showing[]> {
   const html = await getHtml(theater.url)
@@ -33,9 +34,6 @@ async function showings(_start: Date, _end: Date): Promise<Showing[]> {
   return showings
 }
 
-const theater: Theater = {
-  name: 'Film Forum',
-  url: 'https://filmforum.org/',
-}
+const theater: Theater = theaters[1]
 
 export default { showings, theater }

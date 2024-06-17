@@ -14,8 +14,8 @@ export class MoviePageParser {
     this.elems = this.dom.window.document
       .querySelectorAll('#content > div > div.page > div.copy strong')
 
-    let textContents = []
-    this.elems.forEach(elem => textContents.push(elem.textContent.toLowerCase()))
+    let textContents: string[] = []
+    this.elems.forEach(elem => textContents.push(elem.textContent?.toLowerCase() || ''))
     this.text = textContents.join("\n")
   }
 

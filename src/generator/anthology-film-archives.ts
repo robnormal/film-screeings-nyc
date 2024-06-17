@@ -1,12 +1,8 @@
 import {JSDOM} from 'jsdom';
 import {AnthologyListingDivParser} from "./anthology_listing_div_parser";
-import {dateAtTime, getHtml, Theater} from "./lib";
-import {Showing, showingFromTitle} from "./showing";
-
-const theater: Theater = {
-  name: 'Anthology Film Archives',
-  url: 'http://anthologyfilmarchives.org/',
-}
+import {dateAtTime, getHtml, Theater} from "../shared/lib";
+import {Showing} from "./showing";
+import {theaters} from "../shared/theaters";
 
 class MonthScraper {
   start: Date
@@ -56,7 +52,7 @@ class MonthScraper {
   }
 
   showingFromDiv(elem: HTMLDivElement, date: Date): Showing|undefined {
-    const parser = new AnthologyListingDivParser(elem, this.url)
+    const parser = new AnthologyListingDivParser(elem)
     const [hours, minutes] = parser.movieTime()
 
     if (!isNaN(hours) && !isNaN(minutes)) {
@@ -101,48 +97,26 @@ function anthologyUrl(year: number, month: number) {
   return `http://anthologyfilmarchives.org/film_screenings/calendar?view=list&month=${month+1}&year=${year}`
 }
 
-type DateWithShowingsByTheater = {
-  date: string,
-  showingsByTheater: [{
-    theater: Theater,
-    showings: Showing[],
-  }],
-}
-
-function groupListingsByDateAndTheater(showings: Showing[]): DateWithShowingsByTheater[] {
-  const showingsByDateAndTheater: Record<string, DateWithShowingsByTheater> = {}
-
-  showings.forEach(showing => {
-    const day = datejs(showing.datetime).format().toString()
-
-    if (!showingsByDateAndTheater.hasOwnProperty(day)) {
-      showingsByDateAndTheater[day] = { date: day, showingsByTheater: [] }
-    }
-
-    showingsByDateAndTheater[day].showings.push(showing)
-  })
-
-  return showingsByDateAndTheater
-}
-
 async function showings(start: Date, end: Date): Promise<Showing[]> {
   const startMonth = start.getMonth()
   const startYear = start.getFullYear()
   const endMonth = end.getMonth()
   const endYear = end.getFullYear()
 
-  let listings: Showing[] = []
+  let showings: Showing[] = []
 
   for (let year = startYear; year <= endYear; year++) {
     for (let month = startMonth; month <= endMonth; month++) {
       const scraper = new MonthScraper(start, end, year, month)
       const monthListings = await scraper.listings()
 
-      listings = listings.concat(monthListings)
+      showings = showings.concat(monthListings)
     }
   }
 
-  return listings
+  return showings
 }
+
+const theater: Theater = theaters[0]
 
 export default { showings, theater }

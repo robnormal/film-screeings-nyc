@@ -1,4 +1,4 @@
-import {getHtml, init, Movie} from "./lib";
+import {getHtml, init, Movie} from "../shared/lib";
 import {CalendarListing} from "./film-forum-calendar-parser";
 import {MoviePageParser} from "./film-forum-movie-parser";
 

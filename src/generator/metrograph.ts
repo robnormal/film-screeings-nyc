@@ -1,12 +1,8 @@
-import {getHtml, Movie, Theater} from "./lib";
+import {getHtml, Movie, Theater} from "../shared/lib";
 import {JSDOM} from "jsdom";
 import {Showing} from "./showing";
 import dayjs from "dayjs";
-
-const theater: Theater = {
-  name: 'Metrograph',
-  url: 'https://metrograph.com/',
-}
+import {theaters} from "../shared/theaters";
 
 const CALENDAR_URL = 'https://metrograph.com/nyc/'
 
@@ -28,14 +24,22 @@ class CalendarScraper {
       .querySelectorAll('#fl-main-content div.homepage-in-theater-movie')
 
     movieDivs.forEach(div => {
-      const infoDiv: HTMLElement|null = div.querySelector('h3.movie_title')?.parentElement
+      const infoDiv = div.querySelector('h3.movie_title')?.parentElement
       if (!infoDiv) {
         return
       }
 
-      const titleLink = infoDiv.querySelector(':scope > h3.movie_title a')
-      const title = titleLink.textContent.trim()
-      const url = new URL(titleLink.getAttribute('href'), theater.url).href
+      const titleLink = infoDiv.querySelector(':scope > h3.movie_title a[href]')
+      if (!titleLink) {
+        return
+      }
+
+      const title = titleLink.textContent?.trim()
+      if (title === undefined) {
+        return
+      }
+
+      const url = new URL(titleLink.getAttribute('href') || '', theater.url).href
       const movie: Movie = { title }
 
       const subheadings = infoDiv.querySelectorAll(':scope > h5')
@@ -43,9 +47,10 @@ class CalendarScraper {
 
       const detailsText = subheadings.item(1).textContent /* 2002 / 70min / 35mm */
 
-      const details = detailsText.split(/\s*\/\s*/)
       let format: string, duration: string
-      if (details.length >= 3) {
+
+      const details = detailsText?.split(/\s*\/\s*/)
+      if (details && details.length >= 3) {
         [movie.yearMade, duration, format] = details
 
         const durationMatch = duration.toLowerCase().match(/(\d+)\s*min/)
@@ -60,17 +65,23 @@ class CalendarScraper {
 
       showDays.forEach(showDayDiv => {
         // Looks like "Sunday May 5"
-        const dayText = showDayDiv.querySelector(':scope > h5')?.textContent.trim() || ''
+        const dayElem = showDayDiv.querySelector(':scope > h5')
+
+        if (!dayElem) {
+          return
+        }
+
+        const dayText = dayElem.textContent?.trim() || ''
         const dayWords = dayText.split(/\s+/)
 
         if (dayWords.length >= 3) {
           let [_, month, day] = dayWords
           const year = currentMonth === 11 && month.toLowerCase() === 'december' ? currentYear + 1 : currentYear
 
-          const times: string[] = Array.from(showDayDiv.querySelectorAll(':scope > a')).map(elem => {
+          const times: string[] = Array.from(showDayDiv.querySelectorAll(':scope > a:not(:empty)')).map(elem => {
             // have to massage time for dayjs to work
-            const text = elem.textContent.trim().toLowerCase()
-            const match = text.match(/(\d\d?\s*:\s*\d\d)(am|pm)?/)
+            const text = elem.textContent?.trim().toLowerCase() || ''
+            const match = text?.match(/(\d\d?\s*:\s*\d\d)(am|pm)?/)
 
             if (!match) {
               return text
@@ -95,5 +106,7 @@ class CalendarScraper {
     return showings
   }
 }
+
+const theater: Theater = theaters[2]
 
 export default { showings, theater }

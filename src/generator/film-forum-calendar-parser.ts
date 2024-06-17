@@ -36,18 +36,21 @@ export class CalendarParser {
     const calendarListings: CalendarListing[] = []
 
     paragraphs.forEach(paragraph => {
-      const link = paragraph.querySelector(':scope > strong a')
-      if (link) {
-        const url = link.getAttribute('href')
-        const title = link.textContent.trim()
+      const link = paragraph.querySelector(':scope > strong a[href]')
+      if (!link) {
+        return
+      }
+      const url = link.getAttribute('href')
+      const title = link.textContent?.trim()
 
+      if (url && title) {
         paragraph.querySelectorAll(':scope > span').forEach(span => {
-          const [hours, minutes] = this.timeFromText(span.textContent)
+          const [hours, minutes] = this.timeFromText(span.textContent || '')
 
           calendarListings.push({
             url: url,
             title: title,
-            time: { hours, minutes },
+            time: {hours, minutes},
           })
         })
       }
