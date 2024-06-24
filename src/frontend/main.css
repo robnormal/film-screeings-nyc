@@ -1,0 +1,36 @@
+.theater-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.theater-tabs button {
+    padding: 10px 20px;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+}
+
+.theater-tabs button.active {
+    background: #333;
+    color: #fff;
+}
+
+.movie-list .movie-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+h4, p {
+    margin: 0;
+    padding: 0;
+}
+
+h4 {
+    padding: 1ex 100% 1ex 0;
+    width: 100%;
+}
+
+li {
+    list-style: none;
+}

@@ -8,7 +8,9 @@
   },
   "scripts": {
     "generate": "tsx src/generator/scrape.ts",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "build": "src/scripts/build",
+    "regenerate": "src/scripts/regenerate"
   },
   "dependencies": {
     "dayjs": "^1.11.11",

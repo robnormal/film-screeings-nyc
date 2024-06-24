@@ -2,7 +2,8 @@ import dayjs from "dayjs";
 import {Showing} from "../generator/showing";
 import React from "react";
 
-export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
+export const MILLISECONDS_PER_MINUTE = 60 * 1000
+export const MILLISECONDS_PER_DAY = 24 * 60 * MILLISECONDS_PER_MINUTE
 
 export type Movie = {
   title: string

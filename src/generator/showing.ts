@@ -27,3 +27,5 @@ export class Showing {
     }
   }
 }
+
+// https://production-api.readingcinemas.com/films?brandId=US&countryId=6&cinemaId=0000000004&status=getShows&flag=nowshowing&searchAttribute=35mm&selectedDate=2024-06-20

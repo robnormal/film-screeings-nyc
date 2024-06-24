@@ -17,13 +17,13 @@ const MovieList = ({ showings }: { showings: ShowingView[]}) => {
         dates.map(dateText => {
           return (
             <div className="daylistings" key={dateText}>
-              <h2>{formatHumanDate(dayjs(dateText, 'YYYY-MM-DD').toDate())}</h2>
+              <h3>{formatHumanDate(dayjs(dateText, 'YYYY-MM-DD').toDate())}</h3>
               <ul>
                 {showingsByDate[dateText].map(showing => {
                   const date = new Date(showing.timestamp)
                   return (
                     <li key={showingUid(showing)} className="movie-item">
-                      <h3><a href={showing.url}>{showing.movie.title}</a></h3>
+                      <h4><a href={showing.url}>{showing.movie.title}</a></h4>
                       <p>{formatAsTime(date)}</p>
                       <p>{showing.movie.yearMade} {showing.movie.director && ` / ${showing.movie.director}`} / {showing.movie.duration} mins</p>
                     </li>

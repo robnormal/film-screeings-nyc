@@ -25,7 +25,12 @@ export const theaters = [
     id: '5',
     name: 'Nitehawk - Prospect Park',
     url: 'htts://nitehawkcinema.com/prospectpark/',
-  }
+  },
+  {
+    id: '6',
+    name: 'Lincoln Center',
+    url: 'https://www.filmlinc.org/calendar/',
+  },
 ]
 
 export const theatersById: Record<string, Theater> = {}

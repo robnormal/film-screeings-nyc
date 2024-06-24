@@ -1,41 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TheaterTabs from './theater_tabs';
 import MovieList from './movie_list';
 
-import {groupBy, init, SetState, ShowingView} from "../shared/lib";
+import {groupBy, SetState, ShowingView, Theater} from "../shared/lib";
 import {theaters} from "../shared/theaters";
 import {showings} from "./film-showings";
 
 type ShowingsByTheater = Record<string, ShowingView[]>
 
 const App = () => {
-  const [selectedTheater, setSelectedTheater]: [string, SetState<string>] = useState(theaters[0].id)
+  const [selectedTheaterId, setSelectedTheaterId]: [string, SetState<string>] = useState(theaters[0].id)
   const showingsByTheater: ShowingsByTheater = groupBy(showings, (showing: ShowingView) => showing.theaterId)
-
-  /*
-  const [movieListings, setMovieListings]: [ShowingsByTheater, SetState<ShowingsByTheater>] = useState({})
-  useEffect(() => {
-    fetch('movie-times.json').then(response => response.json()).then((showings: ShowingView[]) => {
-      const showingsByTheater: ShowingsByTheater = {}
-      showings.forEach(showing => {
-        init(showingsByTheater, showing.theaterId, [] as ShowingView[])
-        showingsByTheater[showing.theaterId].push(showing)
-      })
-
-      setMovieListings(showingsByTheater);
-    })
-  }, []);
-   */
+  const theatersById: Record<string, Theater> = {}
+  theaters.forEach((t: Theater) => theatersById[t.id] = t)
 
   return (
     <div>
       <TheaterTabs
         theaters={theaters}
-        selectedTheaterId={selectedTheater}
-        onSelectTheater={setSelectedTheater}
+        selectedTheaterId={selectedTheaterId}
+        onSelectTheater={setSelectedTheaterId}
       />
+      <h2 className="theater-name">{theatersById[selectedTheaterId].name}</h2>
       <MovieList
-        showings={showingsByTheater[selectedTheater] || []}
+        showings={showingsByTheater[selectedTheaterId] || []}
       />
     </div>
   );
