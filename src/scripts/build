@@ -1,6 +1,9 @@
 #!/bin/sh
 
-npm run webpack && \
+cd "$FILM_NYC" || exit
+. "$FILM_NYC/.env"
+
+"$NPM" run webpack && \
   gzip -c dist/bundle.js > dist/bundle.js.gz && \
-  cp src/frontend/main.css dist &&
+  cp src/frontend/main.css dist && \
   gzip -c dist/main.css > dist/main.css.gz

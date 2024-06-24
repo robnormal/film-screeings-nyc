@@ -1,6 +1,11 @@
 #!/bin/sh
-cd "$FILM_NYC_GENERATOR" || exit
 
-npm run generate && \
-  scripts/build && \
-  cp -r dist/* "$FILM_NYC_FRONTEND"
+cd "$FILM_NYC" || exit
+. "$FILM_NYC/.env"
+
+"$NPM" run generate && \
+  src/scripts/build && \
+  cp -r dist/* "$FILM_NYC_PUBLIC"
+
+
+
